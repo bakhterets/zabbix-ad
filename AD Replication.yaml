@@ -1,78 +1,67 @@
 zabbix_export:
-  version: '5.2'
-  date: '2020-12-30T20:50:11Z'
-  groups:
-    -
+  version: '6.4'
+  template_groups:
+    - uuid: 1525c35a49b84643b78e505d135a1967
       name: 'Windows Servers'
   templates:
-    -
+    - uuid: e8a769712db34ef5846d74a2c8da084f
       template: 'AD Replication'
       name: 'AD Replication'
       groups:
-        -
-          name: 'Windows Servers'
-      applications:
-        -
-          name: ADReplication.Failure
-        -
-          name: ADReplication.PartnerMetadata
+        - name: 'Windows Servers'
       discovery_rules:
-        -
+        - uuid: 7835e502ac33465187ea2b86655fb408
           name: ADReplicationMetadataAndFailurePartners
           key: 'ADReplication["discovery"]'
           lifetime: 1d
           item_prototypes:
-            -
+            - uuid: 72d10d306f664ae8a32b21039e6868b1
               name: 'ADReplication.Failure.FailureCount.partner:{#PARTNER}'
               key: 'ADReplication["failure",{#PARTNER},FailureCount]'
               delay: 3m
               history: 14d
               value_type: FLOAT
               description: 'Item shows the active directory replication failure count'
-              applications:
-                -
-                  name: ADReplication.Failure
               valuemap:
                 name: 'ActiveDirectory Template'
-              request_method: POST
+              tags:
+                - tag: Application
+                  value: ADReplication.Failure
               trigger_prototypes:
-                -
-                  expression: '{last()}<>0 and {last()}<>-1'
+                - uuid: 40675026faf646968717eba102e47f17
+                  expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
                   recovery_mode: RECOVERY_EXPRESSION
-                  recovery_expression: '{last()}=0 or {last()}<>-1'
+                  recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0 or last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
                   name: 'Replication from {HOST.NAME} to {#PARTNER} failed'
                   manual_close: 'YES'
                   tags:
-                    -
-                      tag: Service
+                    - tag: Service
                       value: ActiveDirectory
-            -
+            - uuid: b2a065a16a5c4fe092ab6a1d92c81ff9
               name: 'ADReplication.Failure.FailureType.partner:{#PARTNER}'
               key: 'ADReplication["failure",{#PARTNER},FailureType]'
               delay: 3m
               history: 14d
               value_type: FLOAT
               description: 'Item shows the active directory replication failure type'
-              applications:
-                -
-                  name: ADReplication.Failure
               valuemap:
                 name: 'ActiveDirectory Template'
-              request_method: POST
-            -
+              tags:
+                - tag: Application
+                  value: ADReplication.Failure
+            - uuid: ea1ea873aafc4b0f9fdc7610cb333e53
               name: 'ADReplication.Failure.LastError.partner:{#PARTNER}'
               key: 'ADReplication["failure",{#PARTNER},LastError]'
               delay: 3m
               history: 14d
               value_type: FLOAT
               description: 'Item shows the active directory replication last error'
-              applications:
-                -
-                  name: ADReplication.Failure
               valuemap:
                 name: 'ActiveDirectory Template'
-              request_method: POST
-            -
+              tags:
+                - tag: Application
+                  value: ADReplication.Failure
+            - uuid: dcd537bedd7f40478f46a9c33265502f
               name: 'ADReplication.Failure.FirstFailureTime.partner:{#PARTNER}'
               key: 'ADReplication["firstfailuretime",{#PARTNER},FirstFailureTime]'
               delay: 3m
@@ -80,12 +69,11 @@ zabbix_export:
               trends: '0'
               value_type: LOG
               description: 'Item shows the active directory replication parameter "FirstFailureTime"'
-              applications:
-                -
-                  name: ADReplication.Failure
               logtimefmt: 'dd-MM-yyyy HH:mm:ss'
-              request_method: POST
-            -
+              tags:
+                - tag: Application
+                  value: ADReplication.Failure
+            - uuid: bca19302d8d548d6baa128c54c0e289b
               name: 'ADReplication.Partner.Metadata.LRAttempt.partner:{#PARTNER}'
               key: 'ADReplication["lastreplicationtime",{#PARTNER},LastReplicationAttempt]'
               delay: 3m
@@ -93,11 +81,11 @@ zabbix_export:
               trends: '0'
               value_type: LOG
               description: 'Item shows the  last replication attempt time'
-              applications:
-                -
-                  name: ADReplication.PartnerMetadata
               logtimefmt: 'dd-MM-yyyy HH:mm:ss'
-            -
+              tags:
+                - tag: Application
+                  value: ADReplication.PartnerMetadata
+            - uuid: 228b0678605242ac867c3f174fbf555f
               name: 'ADReplication.Partner.Metadata.LRSuccess.partner:{#PARTNER}'
               key: 'ADReplication["lastreplicationtime",{#PARTNER},LastReplicationSuccess]'
               delay: 3m
@@ -105,359 +93,327 @@ zabbix_export:
               trends: '0'
               value_type: LOG
               description: 'Item shows the  last replication success time'
-              applications:
-                -
-                  name: ADReplication.PartnerMetadata
               logtimefmt: 'dd-MM-yyyy HH:mm:ss'
-            -
+              tags:
+                - tag: Application
+                  value: ADReplication.PartnerMetadata
+            - uuid: 70acd820f17b4a2dbee06609cc22dde3
               name: 'ADReplication.Partner.Metadata.CRF.partner:{#PARTNER}'
               key: 'ADReplication["value",{#PARTNER},ConsecutiveReplicationFailures]'
               delay: 3m
               history: 14d
               trends: 180d
               description: 'Item shows the consecutive replication failures'
-              applications:
-                -
-                  name: ADReplication.PartnerMetadata
-            -
+              tags:
+                - tag: Application
+                  value: ADReplication.PartnerMetadata
+            - uuid: 505eb4682bf242c3be1a0c8f3f3fabb8
               name: 'ADReplication.Partner.Metadata.LRResult.partner:{#PARTNER}'
               key: 'ADReplication["value",{#PARTNER},LastReplicationResult]'
               delay: 3m
               history: 14d
               trends: 180d
               description: 'Item shows the last replication result'
-              applications:
-                -
-                  name: ADReplication.PartnerMetadata
+              tags:
+                - tag: Application
+                  value: ADReplication.PartnerMetadata
               trigger_prototypes:
-                -
-                  expression: '{last(#2)}>0'
+                - uuid: ea68edfd84d14875a2a805a61f6e28ee
+                  expression: 'last(/AD Replication/ADReplication["value",{#PARTNER},LastReplicationResult],#2)>0'
                   recovery_mode: RECOVERY_EXPRESSION
-                  recovery_expression: '{last(#2)}=0'
+                  recovery_expression: 'last(/AD Replication/ADReplication["value",{#PARTNER},LastReplicationResult],#2)=0'
                   name: 'AD Replication LastReplicationResult on the {HOST.NAME} from the {#PARTNER}'
                   priority: WARNING
                   description: 'Trigger reports about replication failure.'
                   manual_close: 'YES'
                   tags:
-                    -
-                      tag: Service
+                    - tag: Service
                       value: ActiveDirectory
           trigger_prototypes:
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=1127 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: 93928d8c6a4f4b4d96ac6fee9534a86a
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=1127 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '1127: While accessing the hard disk, a disk operation failed even after retries.'
               url: 'https://support.microsoft.com/en-us/help/2025726'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=1256 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: f99103ce3cc34308b69bf3c332585815
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=1256 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '1256: The remote system is not available.'
               url: 'https://support.microsoft.com/en-us/help/2200187'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=1396 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: b17c1e6d7e5a48b8ab170c1fd4628575
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=1396 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '1396: Logon Failure: The target account name is incorrect.'
               url: 'https://support.microsoft.com/en-us/help/2183411'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=1722 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: 2d8cfbe4635c4fbd9b4704c441576780
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=1722 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '1722: The RPC server is unavailable'
               url: 'https://support.microsoft.com/en-us/help/2102154'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=1753 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: 268db2dcf51c48a88ca63d60fc35f957
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=1753 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '1753: There are no more endpoints available from the endpoint mapper.'
               url: 'https://support.microsoft.com/en-us/help/2089874'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=1818 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: fd8e843861ad47938f52c86296483268
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=1818 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '1818: The remote procedure call was cancelled'
               url: 'https://support.microsoft.com/en-us/help/2694215'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=1908 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: f89f2af678c44799951ed9df671d1297
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=1908 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '1908: Could not find the domain controller for this domain.'
               url: 'https://support.microsoft.com/en-us/help/2712026'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8240 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: f34d49ac28bf413ca9c9bdb8b3be550a
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8240 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8240: "There is no such object on the server"'
               url: 'https://support.microsoft.com/en-us/help/2680976'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8333 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: 1b74181fb070466cb614004a1178cb77
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8333 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8333: Directory Object Not Found'
               url: 'https://support.microsoft.com/en-us/help/2703708'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8418 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: a6588249a51849619430ab2a04e5dae1
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8418 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8418: The replication operation failed because of a schema mismatch between the servers involved.'
               url: 'https://support.microsoft.com/en-us/help/2734946'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8446 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: 2e756e640e07417a80a8de1173f85b12
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8446 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8446: The replication operation failed to allocate memory'
               url: 'https://support.microsoft.com/en-us/help/2693500'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8451 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: 18ed48d04cbf4888a08a293d2b6cdac8
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8451 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8451: The replication operation encountered a database error'
               url: 'https://support.microsoft.com/en-us/help/2645996'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8452 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: 20a61c76209648bea4537db37187ad46
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8452 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8452: "The naming context is in the process of being removed or is not replicated from the specified server."'
               url: 'https://support.microsoft.com/en-us/help/2023704'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8453 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: 873ca525cc3a41d0a1375f9f54a37d92
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8453 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8453: "Replication access was denied"'
               url: 'https://support.microsoft.com/en-us/help/2022387'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8456 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: ef43c25d01c740669015b0a1bd07f011
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8456 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8456 or 8457: "The source | destination server is currently rejecting replication requests"'
               url: 'https://support.microsoft.com/en-us/help/2023007'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8457 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: a2408f29da38449e9320ce5cebb3e29e
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8457 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8456 or 8457: "The source | destination server is currently rejecting replication requests"'
               url: 'https://support.microsoft.com/en-us/help/2023007'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8464 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: 6ec4e5a1efa04b3ea7f7e7dd79c65f0d
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8464 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8464: Synchronization attempt failed'
               url: 'https://support.microsoft.com/en-us/help/3001248'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8477 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: 389576d24a6c4fba9146ecafd1388bfe
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8477 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8477: The replication request has been posted; waiting for reply'
               url: 'https://support.microsoft.com/en-us/help/2758780'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8524 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: 7fecaa25f1364f0cb8a4d63c5dd4673b
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8524 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8524: The DSA operation is unable to proceed because of a DNS lookup failure'
               url: 'https://support.microsoft.com/en-us/help/2021446'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8545 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: 5bde6f88eb3046ffbbf27a17c4032948
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8545 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8545: "Replication update could not be applied"'
               url: 'https://support.microsoft.com/en-us/help/3110029'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8589 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: ac373b2bb4324f9c94c21f3167bf792a
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8589 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8589: The DS cannot derive a service principal name (SPN)'
               url: 'https://support.microsoft.com/en-us/help/2703028'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8606 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: c34cf735712d470893a980565c55e7b4
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8606 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8606: "Insufficient attributes were given to create an object"'
               url: 'https://support.microsoft.com/en-us/help/2028495'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
-            -
-              expression: '{AD Replication:ADReplication["failure",{#PARTNER},LastError].last()}=8614 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>0 and {AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}<>-1'
+            - uuid: 27553f9c41cd40d581e7be2c4c08a69f
+              expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},LastError])=8614 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>0 and last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])<>-1'
               recovery_mode: RECOVERY_EXPRESSION
-              recovery_expression: '{AD Replication:ADReplication["failure",{#PARTNER},FailureCount].last()}=0'
+              recovery_expression: 'last(/AD Replication/ADReplication["failure",{#PARTNER},FailureCount])=0'
               name: '8614 The Active Directory cannot replicate with this server because the time since the last replication with this server has exceeded the tombstone lifetime'
               url: 'https://support.microsoft.com/en-us/help/2020053'
               priority: WARNING
               manual_close: 'YES'
               tags:
-                -
-                  tag: Service
+                - tag: Service
                   value: ActiveDirectory
           graph_prototypes:
-            -
+            - uuid: cac24899da3f4ca8936ebfdeabbcdcc2
               name: 'ADReplication.from {HOST.NAME} to {#PARTNER}.Metadata.CRF Graph'
               graph_items:
-                -
-                  color: 199C0D
+                - color: 199C0D
                   item:
                     host: 'AD Replication'
                     key: 'ADReplication["value",{#PARTNER},ConsecutiveReplicationFailures]'
-            -
+            - uuid: f173d8c144364a478b399fbcc1292e41
               name: 'AD Replication failure count from {HOST.NAME} to {#PARTNER}'
               graph_items:
-                -
-                  color: 199C0D
+                - color: 199C0D
                   item:
                     host: 'AD Replication'
                     key: 'ADReplication["failure",{#PARTNER},FailureCount]'
-            -
+            - uuid: b40b7aba9bc6482591a8083bb059ba6a
               name: 'AD Replication last replication result from {HOST.NAME} to {#PARTNER}'
               graph_items:
-                -
-                  color: 199C0D
+                - color: 199C0D
                   item:
                     host: 'AD Replication'
                     key: 'ADReplication["value",{#PARTNER},LastReplicationResult]'
-          request_method: POST
-  value_maps:
-    -
-      name: 'ActiveDirectory Template'
-      mappings:
-        -
-          value: '-1'
-          newvalue: 'Active Directory replication errors not found'
-        -
-          value: '0'
-          newvalue: 'Errors not found'
-        -
-          value: '1'
-          newvalue: Connection
-        -
-          value: '2'
-          newvalue: Link
+      valuemaps:
+        - uuid: 41db156b43e4421083dce959d282de35
+          name: 'ActiveDirectory Template'
+          mappings:
+            - value: '-1'
+              newvalue: 'Active Directory replication errors not found'
+            - value: '0'
+              newvalue: 'Errors not found'
+            - value: '1'
+              newvalue: Connection
+            - value: '2'
+              newvalue: Link
