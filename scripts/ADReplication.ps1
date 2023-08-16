@@ -12,23 +12,23 @@ switch ($action)
 }
 #
 "value" {
-    (Get-ADReplicationPartnerMetadata -target $env:COMPUTERNAME -Filter {Partner -like "*$Partner*"}).$Parameter
+    (Get-ADReplicationPartnerMetadata -target $env:COMPUTERNAME -Filter {Partner -like "CN=NTDS Settings,CN=$Partner*"}).$Parameter
 }
 # convert the time value into the form: dd-MM-yyyy HH:mm:ss
 "lastreplicationtime" {
-    $time=(Get-ADReplicationPartnerMetadata -target $env:COMPUTERNAME -Filter {Partner -like "*$Partner*"}).$Parameter
+    $time=(Get-ADReplicationPartnerMetadata -target $env:COMPUTERNAME -Filter {Partner -like "CN=NTDS Settings,CN=$Partner*"}).$Parameter
     (Get-Date $time -Format "dd-MM-yyyy HH:mm:ss")
 }
 # convert the time value into the form: dd-MM-yyyy HH:mm:ss
 "firstfailuretime" {
-    $time=(Get-ADReplicationFailure -target $env:COMPUTERNAME -Filter {Partner -like "*$Partner*"}).$Parameter
+    $time=(Get-ADReplicationFailure -target $env:COMPUTERNAME -Filter {Partner -like "CN=NTDS Settings,CN=$Partner*"}).$Parameter
     if ($time -eq $null) {"Active Directory replication errors not found"} 
     else {(Get-Date $time -Format "dd-MM-yyyy HH:mm:ss")}
 }
 # value "-1" was created for converting to text message in zabbix
 "failure" {
-    if ($Parameter -eq "FailureType") {$fail=(Get-ADReplicationFailure -target $env:COMPUTERNAME -Filter {Partner -like "*$Partner*"}).$Parameter.value__}
-    else {$fail=(Get-ADReplicationFailure -target $env:COMPUTERNAME -Filter {Partner -like "*$Partner*"}).$Parameter}
+    if ($Parameter -eq "FailureType") {$fail=(Get-ADReplicationFailure -target $env:COMPUTERNAME -Filter {Partner -like "CN=NTDS Settings,CN=$Partner*"}).$Parameter.value__}
+    else {$fail=(Get-ADReplicationFailure -target $env:COMPUTERNAME -Filter {Partner -like "CN=NTDS Settings,CN=$Partner*"}).$Parameter}
 	if ($fail -eq $null) {"-1"} else {$fail}
 }
 default {"Script error"}
